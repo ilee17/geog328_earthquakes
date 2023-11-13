@@ -55,8 +55,9 @@ tr:nth-child(even) {
         <button>Sort alphabetically</button>
         <tabel>
           <tr>
-            <th>City</th>
-            <th>cameraID</th>
+            <th>id</th>
+            <th>unitID</th>
+            <th>type</th>
           </tr>
         </tabel>
       </div>
@@ -79,12 +80,25 @@ tr:nth-child(even) {
         response = await fetch('assets/trafficCameras.geojson');
         trafficCam = await reponse.json();
 
+        table = document.getElementsByTagName("table")[0];
+        let row, cell1, cell2, cell3;
+        for (let i = 0; i < trafficCam.features.length; i++) {
+
+            row = table.insertRow(-1);
+            cell1 = row.insertCell(0);
+            cell2 = row.insertCell(1);
+            cell3 = row.insertCell(2);
+            cell1.innerHTML = trafficCam.features[i].properties.OBJECTID;
+            cell2.innerHTML = trafficCam.features[i].properties.UNITID;
+            cell3.innerHTML = trafficCam.features[i].properties.COMPTYPE;
+            }
+
       };
       geojsonFetch();
 
       map.on('load', function loadingData() {
 
-        map.addSource('kingCounty', {
+        map.addSource('KingCounty', {
             type: 'geojson',
             data: kingCounty
         });
