@@ -2,19 +2,123 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Traffic Cameras in King County</title>
     <meta name="vieport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        display: flex;
+        height: 100vh;
+        flex-direction: row;
+        align-items: stretch;
+      }
+
+      #side {
+        flex-basis: 500px;
+        overflow-y: scroll;
+      }
+
+      #map {
+        flex-grow: 1;
+      }
+      button {
+        margin-bottom: 5px;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        border: 1px solid blueviolet;
+      }
+
+      th,
+      td {
+          text-align: left;
+          padding: 16px;
+      }
+
+tr:nth-child(even) {
+    background-color: violet;
+}
     </style>
   </head>
   <body>
     <main id="container">
-      <div id = "side">
+      <div id ="side">
+        <h2>Cities in King County</h2>
+        <button>Sort alphabetically</button>
+        <tabel>
+          <tr>
+            <th>City</th>
+            <th>cameraID</th>
+          </tr>
+        </tabel>
       </div>
       <div id="map"></div>
     </main>
+    <script>
+      mapboxgl.accessToken =
+          'pk.eyJ1IjoiaWxlZTE3IiwiYSI6ImNsb3VmdHA0dzBoenMybG5ybWk3dnEybXoifQ.2ncPv5P0SQHinPvS0LQcVA'
+      let map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        zoom: 7,
+        center: [-122, 47]
+      })
+
+      async function geojsonFetch() {
+        let response, kingCounty, trafficCam, table;
+        response = await fetch('assets/KingCounty.geojson');
+        kingCounty = await response.json();
+        response = await fetch('assets/trafficCameras.geojson');
+        trafficCam = await reponse.json();
+
+      };
+      geojsonFetch();
+
+      map.on('load', function loadingData() {
+
+        map.addSource('kingCounty', {
+            type: 'geojson',
+            data: kingCounty
+        });
+
+        map.addLayer({
+            'id': 'kingCounty-layer',
+            'type': 'fill',
+            'source': 'kingCounty',
+            'paint': {
+                'circle-radius': 8,
+                'circle-stroke-width': 2,
+                'circle-color': 'red',
+                'circle-stroke-color': 'white'
+            }
+        });
+
+
+        map.addSource('trafficCam', {
+            type: 'geojson',
+            data: trafficCam
+        });
+
+        map.addLayer({
+            'id': 'trafficCam-layer',
+            'type': 'circle',
+            'source': 'trafficCam',
+            'paint': {
+                'fill-color': '#0080ff', // blue color fill
+                'fill-opacity': 0.5
+            }
+        });
+
+      });
+    </script>
 
   </body>
 </html>
