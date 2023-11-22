@@ -54,7 +54,7 @@ tr:nth-child(even) {
     <main id="container">
       <div id ="side">
         <h2>Traffic Cameras in King County</h2>
-        <button>Sort alphabetically</button>
+        <button id="button">Sort alphabetically</button>
         <table>
           <tr>
             <th>id</th>
@@ -138,7 +138,7 @@ tr:nth-child(even) {
       };
       geojsonFetch();
 
-      let btn = document.getElementByTagName("button")[0];
+      let btn = document.getElementsByid("button");
       btn.addEventListener('click', sortTable);
       function sortTable(e){
         function sortTable(e) {
