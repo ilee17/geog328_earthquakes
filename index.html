@@ -77,7 +77,7 @@ tr:nth-child(even) {
 
       async function geojsonFetch() {
         let response, kingCounty, trafficCam, table;
-        response = await fetch('/assets/KingCounty.geojson');
+        response = await fetch('/assets/kingCounty.geojson');
         kingCounty = await response.json();
         response = await fetch('/assets/trafficCameras.geojson');
         trafficCam = await response.json();
